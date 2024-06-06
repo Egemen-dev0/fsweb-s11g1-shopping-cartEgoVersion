@@ -1,15 +1,22 @@
-import React from "react";
+import React, {useContext} from "react";
 import { ScProduct } from "./scParts";
+import {ProductContext} from "../Contexts/ProductContext";
+import { CartContext } from "../Contexts/CartContext";
+
 
 const Product = (props) => {
+  const {products} = useContext(ProductContext);
+  const {addItem} = useContext(CartContext);
+  const product = products.find(item => props.product.id===item.id)
+  
   return (
     <ScProduct>
-      <img src={props.product.image} alt={`${props.product.title} book`} />
+      <img src={product?.image} alt={`${product?.title} book`} />
       <div className="details">
-        <h1 className="title">{props.product.title}</h1>
+        <h1 className="title">{product?.title}</h1>
         <div className="footer">
-          <p className="price">${props.product.price}</p>
-          <button onClick={() => props.addItem(props.product)}>
+          <p className="price">${product?.price}</p>
+          <button onClick={() => addItem(product)}>
             Add to cart
           </button>
         </div>
