@@ -1,23 +1,28 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+import { getSavedCart, setSaveCart } from "./../LocalStoraj/index";
 
 const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
-    const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(getSavedCart());
 
-    const addItem = item => {
-        setCart([...cart, item]);
-    };
+  useEffect(() => {
+    setSaveCart(cart);
+  }, [cart]);
 
-    const removeItem = itemToBeRemovedID => {
-        setCart(cart.filter(item => item.id !== itemToBeRemovedID));
-    };
+  const addItem = (item) => {
+    setCart([...cart, item]);
+  };
 
-    return (
-        <CartContext.Provider value={{ cart, addItem, removeItem }}>
-            {children}
-        </CartContext.Provider>
-    );
+  const removeItem = (itemToBeRemovedID) => {
+    setCart(cart.filter((item) => item.id !== itemToBeRemovedID));
+  };
+
+  return (
+    <CartContext.Provider value={{ cart, addItem, removeItem }}>
+      {children}
+    </CartContext.Provider>
+  );
 };
 
 export { CartContext, CartProvider };
